@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excavate 2025 | Band Gap Explorer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <div class="excavate-container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-gem crystal-icon"></i>
+                <h1>EXCAVATE <span class="year">2025</span></h1>
+            </div>
+            <h2>Band Gap Explorer</h2>
+            <p class="tagline">Uncovering the electronic properties of novel materials</p>
+        </div>
+        
+        <div class="explorer-panel">
+            <div class="input-section">
+                <form method="POST">
+                    <div class="form-group">
+                        <label for="functional_group">Select Functional Group:</label>
+                        <div class="custom-select">
+                            <select name="functional_group" id="functional_group">
+                                {% for group in functional_groups %}
+                                    <option value="{{ group }}">{{ group }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="select-arrow"><i class="fas fa-chevron-down"></i></div>
+                        </div>
+                    </div>
+                    <button type="submit" class="analyze-btn">
+                        <i class="fas fa-microscope"></i> Analyze Material
+                    </button>
+                </form>
+            </div>
+
+            {% if result %}
+            <div class="results-section">
+                <div class="result-header">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Analysis Results</h3>
+                </div>
+                
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-label">Functional Group</div>
+                        <div class="result-value">{{ result.selected_group }}</div>
+                    </div>
+                    
+                    <div class="result-item highlight">
+                        <div class="result-label">Band Gap</div>
+                        <div class="result-value">{{ result.band_gap }} <span class="unit">eV</span></div>
+                    </div>
+                    
+                    <div class="result-item">
+                        <div class="result-label">Material Classification</div>
+                        <div class="result-value material-type">{{ result.material_type }}</div>
+                    </div>
+                </div>
+                
+                <div class="model-details">
+                    <h4><i class="fas fa-robot"></i> Model Predictions</h4>
+                    <div class="model-result">
+                        <div class="model-label">Classification:</div>
+                        <div class="model-value">{{ result.classification_model_output }}</div>
+                    </div>
+                    
+                    {% if result.regression_model_output is not none %}
+                    <div class="model-result">
+                        <div class="model-label">Regression:</div>
+                        <div class="model-value">{{ result.regression_model_output }} <span class="unit">eV</span></div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-atom"></i>
+                <p>Select a functional group to analyze its band gap properties</p>
+            </div>
+            {% endif %}
+        </div>
+        
+        <footer>
+            <p>&copy; Excavate 2025 Hackathon | Materials Science Division</p>
+        </footer>
+    </div>
+</body>
+</html>
